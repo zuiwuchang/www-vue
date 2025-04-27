@@ -1,0 +1,13 @@
+@import './base.css';
+
+
+.container {
+  width: 100%;
+  padding: 0 0.75rem;
+}
+
+@media screen and (min-width: 1216px) {
+  .container:not(.is-max-tablet):not(.is-max-desktop) {
+    max-width: 1152px;
+  }
+}
