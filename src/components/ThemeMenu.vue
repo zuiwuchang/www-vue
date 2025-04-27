@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { h } from 'vue';
-import { DarkModeOutlined, LightModeOutlined, CircleOutlined, CheckCircleOutlined } from '@vicons/material'
+import {
+    DarkModeOutlined, LightModeOutlined,
+    CircleOutlined, CheckCircleOutlined,
+} from '@vicons/material'
 import { DarkTheme20Filled } from '@vicons/fluent'
 import {
     NButton,

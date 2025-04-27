@@ -115,61 +115,51 @@ export class BreakpointInstance {
 
     /**
      * block sm:hidden
-     * - v-if="$breakpoint.miniOnly" 只在 < 576px 的屏幕上渲染，可能是電子手錶
+     * - v-if="$breakpoint.miniOnly.value" 只在 < 576px 的屏幕上渲染，可能是電子手錶
      */
-    get miniOnly() {
-        return this.breakpoint.value == Breakpoint.mini
-    }
+    readonly miniOnly = computed(() => this.breakpoint.value == Breakpoint.mini)
     /**
      * hidden sm:block md:hidden
-     * - v-if="$breakpoint.smOnly" 只在 [576px, 768px) 的小屏幕上渲染，通常是手機屏幕
+     * - v-if="$breakpoint.smOnly.value" 只在 [576px, 768px) 的小屏幕上渲染，通常是手機屏幕
      */
-    get smOnly() {
-        return this.breakpoint.value == Breakpoint.sm
-    }
+    readonly smOnly = computed(() => this.breakpoint.value == Breakpoint.sm)
     /**
      * hidden md:block lg:hidden
-     * - v-if="$breakpoint.mdOnly" 只在 [768px, 992px) 的中等屏幕渲染，通常是大屏手機或平板
+     * - v-if="$breakpoint.mdOnly.value" 只在 [768px, 992px) 的中等屏幕渲染，通常是大屏手機或平板
      */
-    get mdOnly() {
-        return this.breakpoint.value == Breakpoint.md
-    }
+    readonly mdOnly = computed(() => this.breakpoint.value == Breakpoint.md)
     /**
      * hidden lg:block xl:hidden
-     * - v-if="$breakpoint.lgOnly" 只在 [992px, 1200px) 的大屏幕渲染，通常是筆記本或桌面機
+     * - v-if="$breakpoint.lgOnly.value" 只在 [992px, 1200px) 的大屏幕渲染，通常是筆記本或桌面機
      */
-    get lgOnly() {
-        return this.breakpoint.value == Breakpoint.lg
-    }
+    readonly lgOnly = computed(() => this.breakpoint.value == Breakpoint.lg)
     /**
      * hidden xl:block
-     * - v-if="$breakpoint.xlOnly" 只在 >= 1200px 的超大屏幕渲染，通常是桌面機或電視
+     * - v-if="$breakpoint.xlOnly.value" 只在 >= 1200px 的超大屏幕渲染，通常是桌面機或電視
      */
-    readonly xlOnly = computed(() => {
-        return this.breakpoint.value == Breakpoint.xl
-    })
+    readonly xlOnly = computed(() => this.breakpoint.value == Breakpoint.xl)
     /**
      * hidden sm:block
-     * - v-if="$breakpoint.sm" 在屏幕尺寸 >= 576px 時渲染
-     * - v-if="!$breakpoint.sm" 在屏幕尺寸 < 576px 時渲染
+     * - v-if="$breakpoint.sm.value" 在屏幕尺寸 >= 576px 時渲染
+     * - v-if="!$breakpoint.sm.value" 在屏幕尺寸 < 576px 時渲染
      */
     readonly sm = computed(() => this.breakpoint.value >= Breakpoint.sm)
     /**
      * hidden md:block
-     * - v-if="$breakpoint.md" 在屏幕尺寸 >= 768px 時渲染
-     * - v-if="!$breakpoint.md" 在屏幕尺寸 < 768px 時渲染
+     * - v-if="$breakpoint.md.value" 在屏幕尺寸 >= 768px 時渲染
+     * - v-if="!$breakpoint.md.value" 在屏幕尺寸 < 768px 時渲染
      */
     readonly md = computed(() => this.breakpoint.value >= Breakpoint.md)
     /**
      * hidden lg:block
-     * - v-if="$breakpoint.lg" 在屏幕尺寸 >= 992px 時渲染
-     * - v-if="!$breakpoint.lg" 在屏幕尺寸 < 992px 時渲染
+     * - v-if="$breakpoint.lg.value" 在屏幕尺寸 >= 992px 時渲染
+     * - v-if="!$breakpoint.lg.value" 在屏幕尺寸 < 992px 時渲染
      */
     readonly lg = computed(() => this.breakpoint.value >= Breakpoint.lg)
     /**
      * hidden xl:block
-     * - v-if="$breakpoint.xl" 在屏幕尺寸 >= 1200px 時渲染
-     * - v-if="!$breakpoint.xl" 在屏幕尺寸 < 1200px 時渲染
+     * - v-if="$breakpoint.xl.value" 在屏幕尺寸 >= 1200px 時渲染
+     * - v-if="!$breakpoint.xl.value" 在屏幕尺寸 < 1200px 時渲染
      */
     readonly xl = computed(() => this.breakpoint.value >= Breakpoint.xl)
 }
