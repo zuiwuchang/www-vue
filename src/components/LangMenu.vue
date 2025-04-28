@@ -11,13 +11,14 @@ import {
     NDropdown,
     NIcon,
 } from 'naive-ui';
-import type { DropdownOption, DropdownRenderOption, DropdownDividerOption } from 'naive-ui';
-
-import { useLocale, Locales } from '../plugins/locale'
+import type {
+    DropdownOption, DropdownRenderOption, DropdownDividerOption,
+} from 'naive-ui';
+import { useLocaleStore, Locales } from '@/stores/locale'
 import { useI18n } from 'vue-i18n'
 
 const i18n = useI18n()
-const locale = useLocale()
+const locale = useLocaleStore()
 interface RenderItemOptions {
     label: string
     suffix?: Component
@@ -50,7 +51,7 @@ function renderItem(opts: RenderItemOptions) {
                 const children = [
                     h(NIcon, { style: { marginRight: '8px' } }, {
                         default: () => h(
-                            locale.id == opts.key ? CheckCircleOutlined : CircleOutlined
+                            locale.choose == opts.key ? CheckCircleOutlined : CircleOutlined
                         )
                     }),
                     h('span', { style: { flex: 1, textAlign: 'left' } }, opts.translate ? i18n.t(opts.label) : opts.label),
@@ -80,7 +81,7 @@ const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption
             label: v.name,
             key: v.id,
             onClick: () => {
-                locale.id = v.id
+                locale.choose = v.id
             },
         })
     });
@@ -94,15 +95,18 @@ menus.push(
         label: 'lang.auto',
         key: 'auto',
         onClick: () => {
-            locale.id = 'auto'
+            locale.choose = 'auto'
         },
     }),
 )
 
+const props = defineProps<{
+    placement?: any
+}>()
 
 </script>
 <template>
-    <n-dropdown trigger="hover" :show-arrow="true" placement="bottom-end" :options="menus">
+    <n-dropdown trigger="hover" :placement="props.placement" :show-arrow="true" :options="menus">
         <n-button :text="true">
             <template #icon>
                 <n-icon>

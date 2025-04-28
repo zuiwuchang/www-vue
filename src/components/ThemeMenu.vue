@@ -12,10 +12,10 @@ import {
 } from 'naive-ui';
 import type { DropdownOption, DropdownRenderOption, DropdownDividerOption } from 'naive-ui';
 import type { Component } from 'vue';
-import { useTheme } from '../plugins/theme'
+import { useThemeStore } from '@/stores/theme'
 import { useI18n } from 'vue-i18n'
 const i18n = useI18n()
-const theme = useTheme()
+const theme = useThemeStore()
 interface RenderItemOptions {
     label: string
     suffix: Component
@@ -47,7 +47,7 @@ function renderItem(opts: RenderItemOptions) {
                 h('div', { style: { display: 'flex', alignItems: 'center', width: '100%' } }, [
                     h(NIcon, { style: { marginRight: '8px' } }, {
                         default: () => h(
-                            theme.name == opts.key ? CheckCircleOutlined : CircleOutlined
+                            theme.choose == opts.key ? CheckCircleOutlined : CircleOutlined
                         )
                     }),
                     h('span', { style: { flex: 1, textAlign: 'left' } }, i18n.t(opts.label)),
@@ -71,7 +71,7 @@ const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption
         suffix: DarkModeOutlined,
         key: 'dark',
         onClick: () => {
-            theme.name = 'dark'
+            theme.choose = 'dark'
         }
     }),
     createItem({
@@ -79,7 +79,7 @@ const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption
         suffix: LightModeOutlined,
         key: 'light',
         onClick: () => {
-            theme.name = 'light'
+            theme.choose = 'light'
         }
     }),
     {
@@ -91,7 +91,7 @@ const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption
         suffix: DarkTheme20Filled,
         key: 'auto',
         onClick: () => {
-            theme.name = 'auto'
+            theme.choose = 'auto'
         }
     }),
 ]
@@ -101,10 +101,10 @@ const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption
     <n-dropdown trigger="hover" :show-arrow="true" placement="bottom-end" :options="menus">
         <n-button :text="true">
             <template #icon>
-                <n-icon v-if="$theme.theme.name == 'dark'">
+                <n-icon v-if="theme.name == 'dark'">
                     <DarkModeOutlined />
                 </n-icon>
-                <n-icon v-if="$theme.theme.name != 'dark'">
+                <n-icon v-if="theme.name != 'dark'">
                     <LightModeOutlined />
                 </n-icon>
             </template>
