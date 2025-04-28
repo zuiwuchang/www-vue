@@ -10,8 +10,10 @@ import {
     NButton, NIcon,
 } from 'naive-ui'
 import { useThemeStore } from '@/stores/theme'
+import { useBreakpointStore } from '@/stores/breakpoint'
 
 const theme = useThemeStore()
+const breakpoint = useBreakpointStore()
 
 const open = ref(false)
 </script>
@@ -20,7 +22,7 @@ const open = ref(false)
     <n-el>
         <!-- 爲桌面系統佈局導航 -->
         <div :class="theme.name == 'dark' ? 'navbar-dark' : 'navbar-light'"
-            class="flex justify-content-center align-items-center" v-if="$breakpoint.md.value">
+            class="flex justify-content-center align-items-center" v-if="breakpoint.md">
             <div class="container flex">
                 <div class="flex flex-grow-1 gap-2">
                     <slot name="brand"></slot>

@@ -11,24 +11,30 @@ import { useI18n } from 'vue-i18n'
 
 import { useThemeStore } from '@/stores/theme'
 import { useLocaleStore } from '@/stores/locale'
+import { useBreakpointStore } from '@/stores/breakpoint'
 
 import ThemeMenu from './components/ThemeMenu.vue'
 import LangMenu from './components/LangMenu.vue'
 const theme = useThemeStore()
 const i18n = useI18n()
 const locale = useLocaleStore()
+const breakpoint = useBreakpointStore()
 watchEffect(() => {
   i18n.locale.value = locale.locale.id
 })
 
-let cleanup: (() => void) | undefined
-
+let cleanupLocale: (() => void) | undefined
+let cleanupBreakpoint: (() => void) | undefined
 onMounted(() => {
-  cleanup = locale.start()
+  cleanupLocale = locale.start()
+  cleanupBreakpoint = breakpoint.start()
 })
 onUnmounted(() => {
-  if (cleanup) {
-    cleanup()
+  if (cleanupLocale) {
+    cleanupLocale()
+  }
+  if (cleanupBreakpoint) {
+    cleanupBreakpoint()
   }
 })
 </script>
@@ -49,7 +55,7 @@ onUnmounted(() => {
 
         <!-- menu 在桌面系統顯示到 導航欄左側，手機顯示到導航欄 摺疊部分 -->
         <template v-slot:menu>
-          <LangMenu :placement="$breakpoint.md.value ? 'left-end' : 'right-end'" />
+          <LangMenu :placement="breakpoint.md ? 'left-end' : 'right-end'" />
         </template>
 
         <!-- right-menu 在桌面系統顯示到 導航欄右側，手機顯示到導航欄 摺疊部分 -->

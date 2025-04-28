@@ -8,15 +8,12 @@ import zhTW from './locale/zhTW.json'
 import zhCN from './locale/zhCN.json'
 import enUS from './locale/enUS.json'
 
-import { createBreakpoint } from './plugins/breakpoint'
-
 import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
 
 app.use(createPinia())
-app.use(createBreakpoint())
 app.use(createI18n({
     legacy: false,
     locale: 'en-us',
