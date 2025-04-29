@@ -144,6 +144,10 @@ export const useLocaleStore = defineStore('locale', () => {
         choose,
         /**
          * 開始監聽系統語言環境變化
+         * @returns {Function} 清理函數，必須在組件卸載時調用（例如，onUnmounted）
+         * @example
+         * onMounted(() => { cleanup = start(); });
+         * onUnmounted(() => { cleanup(); });
          */
         start,
     }

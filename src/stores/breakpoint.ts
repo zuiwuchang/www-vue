@@ -1,49 +1,58 @@
-import { ref, computed, shallowRef } from 'vue'
+import { computed, shallowRef } from 'vue'
 import { defineStore } from 'pinia'
 
-import { equal, once, saveValue } from '@/internal/utils'
+import { once } from '@/internal/utils'
 
 /**
  * 定義屏幕尺寸
  */
 export enum Breakpoint {
     /**
-     * < 576px 的屏幕，不知道是什麼，電子手錶?
+     * < 576px 的屏幕，例如：極小屏幕、穿戴式設備
      */
-    mini,
+    mini = 0,
     /**
      * [576px, 768px) 的小屏幕，通常是手機屏幕
      */
-    sm,
+    sm = 1,
     /**
      * [768px, 992px) 的中等屏幕，通常是大屏手機或平板
      */
-    md,
+    md = 2,
     /**
      * [992px, 1200px) 的大屏幕，通常是筆記本或桌面機
      */
-    lg,
+    lg = 3,
     /**
      * >= 1200px 的超大屏幕，通常是桌面機或電視
      */
-    xl,
+    xl = 4,
 }
 
-
+/**
+ * 定義斷點 臨界值
+ */
+export const BREAKPOINTS = {
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200,
+};
 /**
  * 這個 store 用於窗口查詢結果以便與爲不同窗口實現響應式佈局
  */
 export const useBreakpointStore = defineStore('breakpoint', () => {
-    const matchs = [
-        window.matchMedia(`(min-width: 576px)`),
-        window.matchMedia(`(min-width: 768px)`),
-        window.matchMedia(`(min-width: 992px)`),
-        window.matchMedia(`(min-width: 1200px)`),
-    ]
-    const breakpoint = ref(calculate(matchs[0].matches, matchs[1].matches, matchs[2].matches, matchs[3].matches))
-    const handler = (_: MediaQueryListEvent) => {
+    const isBrowser = typeof window !== 'undefined' && typeof window.matchMedia === 'function';
+    const matchs = isBrowser ? [
+        window.matchMedia(`(min-width: ${BREAKPOINTS.sm}px)`),
+        window.matchMedia(`(min-width: ${BREAKPOINTS.md}px)`),
+        window.matchMedia(`(min-width: ${BREAKPOINTS.lg}px)`),
+        window.matchMedia(`(min-width: ${BREAKPOINTS.xl}px)`),
+    ] : undefined
+    const breakpoint = shallowRef(matchs ? calculate(matchs[0].matches, matchs[1].matches, matchs[2].matches, matchs[3].matches) : Breakpoint.lg)
+    const handler = matchs ? (_: MediaQueryListEvent) => {
         breakpoint.value = calculate(matchs[0].matches, matchs[1].matches, matchs[2].matches, matchs[3].matches)
-    }
+    } : undefined
 
     const miniOnly = computed(() => breakpoint.value == Breakpoint.mini)
     const smOnly = computed(() => breakpoint.value == Breakpoint.sm)
@@ -57,9 +66,12 @@ export const useBreakpointStore = defineStore('breakpoint', () => {
 
     let counter = 0
     function start() {
+        if (!matchs) {
+            return nothing
+        }
         if (counter == 0) {
-            for (const match of matchs!) {
-                match.addEventListener("change", handler)
+            for (const match of matchs) {
+                match.addEventListener("change", handler!)
             }
         }
         counter++
@@ -67,8 +79,8 @@ export const useBreakpointStore = defineStore('breakpoint', () => {
         return once(() => {
             counter--
             if (counter === 0) {
-                for (const match of matchs!) {
-                    match.removeEventListener("change", handler)
+                for (const match of matchs) {
+                    match.removeEventListener("change", handler!)
                 }
             }
         })
@@ -76,6 +88,14 @@ export const useBreakpointStore = defineStore('breakpoint', () => {
     return {
         /**
          * 當前屏幕尺寸
+         * @remarks 在 SSR 環境中，默認為 Breakpoint.lg（桌面），可通過 App.vue 或其他頂層組件修改
+         * @example
+         * // 在 App.vue 中設置 SSR 斷點
+         * import { useBreakpointStore, Breakpoint } from '@/stores/breakpoint';
+         * const { breakpoint } = useBreakpointStore();
+         * if (!process.client) {
+         *   breakpoint.value = Breakpoint.sm; // 模擬手機斷點
+         * }
          */
         breakpoint,
 
@@ -131,11 +151,15 @@ export const useBreakpointStore = defineStore('breakpoint', () => {
 
         /**
          * 開始監聽屏幕尺寸變化
+         * @returns {Function} 清理函數，必須在組件卸載時調用（例如，onUnmounted）
+         * @example
+         * onMounted(() => { cleanup = start(); });
+         * onUnmounted(() => { cleanup(); });
          */
         start,
     }
 })
-
+function nothing() { }
 /**
  * 計算屏幕尺寸屬於哪個級別
  */

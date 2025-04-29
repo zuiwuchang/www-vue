@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { shallowRef, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { darkTheme, lightTheme, useOsTheme } from 'naive-ui'
 import { saveValue } from '@/internal/utils'
@@ -12,12 +12,12 @@ export const useThemeStore = defineStore('theme', () => {
     /**
      * 跟蹤操作系統的配色風格
      */
-    const os = ref(useOsTheme())
+    const os = shallowRef(useOsTheme())
 
     /**
      * 用戶設置
      */
-    const userdata = ref(loadValue())
+    const userdata = shallowRef(loadValue())
 
     const name = computed(() => {
         switch (userdata.value) {
