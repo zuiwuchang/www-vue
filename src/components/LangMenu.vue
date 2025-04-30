@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { h } from 'vue';
 
 import {
     CircleOutlined, CheckCircleOutlined,
@@ -15,26 +14,20 @@ import type {
 } from 'naive-ui';
 import { useLocaleStore, Locales } from '@/stores/locale'
 import { useI18n } from 'vue-i18n'
+import { renderLabel } from '@/internal/render/label'
 
 const i18n = useI18n()
 const locale = useLocaleStore()
 
-function iconRender(id: string) {
-    return () => h(NIcon, null, {
-        default: () => h(
-            locale.choose === id ? CheckCircleOutlined : CircleOutlined
-        )
-    })
-}
-function labelRender(key: string) {
-    return () => h('div', null, i18n.t(key))
-}
+
 const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption> =
     Locales.map((v) => {
         return {
             key: v.id,
-            label: v.name,
-            icon: iconRender(v.id),
+            label: renderLabel({
+                label: v.name,
+                prefixRender: () => locale.choose === v.id ? CheckCircleOutlined : CircleOutlined,
+            }),
         }
     });
 menus.push(
@@ -44,8 +37,10 @@ menus.push(
     },
     {
         key: 'auto',
-        label: labelRender('lang.auto'),
-        icon: iconRender('auto'),
+        label: renderLabel({
+            label: () => i18n.t('lang.auto'),
+            prefixRender: () => locale.choose === 'auto' ? CheckCircleOutlined : CircleOutlined,
+        }),
     }
 )
 function handleSelect(key: string,

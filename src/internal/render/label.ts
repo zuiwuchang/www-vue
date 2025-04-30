@@ -49,6 +49,10 @@ export interface RenderLabelOptions {
      * 可選的點擊事件處理函數，應用於 <a>、RouterLink 或 div
      */
     onClick?: (event: MouseEvent) => void
+    /**
+        * 可選的交互事件處理函數，處理鼠標點擊、鍵盤 Enter 鍵和電視遙控器確定按鈕，應用於 <a>、RouterLink 或 div
+        */
+    onTab?: (event: Event) => void;
 }
 
 function renderDivStatic() {
@@ -63,12 +67,26 @@ function renderUrlStatic(url: null | undefined | string,
     ariaLabel?: string | (() => null | undefined | string),
     target?: '_blank' | '_self' | '_parent' | '_top',
     onClick?: (event: MouseEvent) => void,
+    onTab?: (event: Event) => void,
 ) {
+    const handleTab = onTab
+        ? (event: KeyboardEvent) => {
+            if (event.type === 'keyup' && (event as KeyboardEvent).key === 'Enter') {
+                onTab(event)
+            }
+        }
+        : undefined;
+    if (onTab) {
+        onClick = onTab
+    }
+
     if (url === null || url === undefined) {
         return h('div',
             {
                 class: css,
                 onClick: onClick,
+                onKeyup: handleTab,
+                tabindex: onTab ? '0' : undefined,
             },
             children.map((f) => f()))
     }
@@ -85,6 +103,8 @@ function renderUrlStatic(url: null | undefined | string,
                 rel: target === '_blank' ? 'noopener noreferrer' : undefined,
                 'aria-label': finalLabel,
                 onClick: onClick,
+                onKeyup: handleTab,
+                tabindex: onTab ? '0' : undefined,
             },
             children.map((f) => f()))
     }
@@ -94,6 +114,8 @@ function renderUrlStatic(url: null | undefined | string,
             class: css,
             'aria-label': finalLabel,
             onClick: onClick,
+            onKeyup: handleTab,
+            tabindex: onTab ? '0' : undefined,
         },
         () => children.map((f) => f()))
 }
@@ -169,7 +191,7 @@ export function renderLabel(options: RenderLabelOptions) {
                 ],
                 css,
                 options.ariaLabel, options.target,
-                options.onClick,
+                options.onClick, options.onTab,
             )
         case 'function':
             return () => renderUrlStatic(url(),
@@ -180,7 +202,7 @@ export function renderLabel(options: RenderLabelOptions) {
                 ],
                 css,
                 options.ariaLabel, options.target,
-                options.onClick,
+                options.onClick, options.onTab,
             )
         default:
             return () => renderUrlStatic(null,
@@ -191,7 +213,7 @@ export function renderLabel(options: RenderLabelOptions) {
                 ],
                 css,
                 undefined, undefined,
-                options.onClick,
+                options.onClick, options.onTab,
             )
     }
 }

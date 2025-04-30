@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { h } from 'vue'
 import {
     DarkModeOutlined, LightModeOutlined,
     CircleOutlined, CheckCircleOutlined,
@@ -11,46 +10,28 @@ import {
     NIcon,
 } from 'naive-ui'
 import type { DropdownOption, DropdownRenderOption, DropdownDividerOption } from 'naive-ui'
-import type { Component } from 'vue'
 import { useThemeStore } from '@/stores/theme'
 import { useI18n } from 'vue-i18n'
+import { renderLabel } from '@/internal/render/label'
 const i18n = useI18n()
 const theme = useThemeStore()
 
-function iconRender(id: string) {
-    return () => h(NIcon, null, {
-        default: () => h(
-            theme.choose === id ? CheckCircleOutlined : CircleOutlined
-        )
-    })
-}
-function labelRender(key: string, suffix?: Component) {
-    return () => h('div',
-        {
-            class: "flex flex-row align-items-center align-content-center justify-content-between gap-2",
-        },
-        [
-            h('div',
-                {
-                    class: '',
-                },
-                i18n.t(key),
-            ),
-            suffix ? h(NIcon, null, {
-                default: () => h(suffix)
-            }) : h('div')
-        ])
-}
 const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption> = [
     {
         key: 'dark',
-        label: labelRender('theme.dark', DarkModeOutlined),
-        icon: iconRender('dark'),
+        label: renderLabel({
+            label: () => i18n.t('theme.dark'),
+            prefixRender: () => theme.choose === 'dark' ? CheckCircleOutlined : CircleOutlined,
+            suffix: DarkModeOutlined,
+        }),
     },
     {
         key: 'light',
-        label: labelRender('theme.light', LightModeOutlined),
-        icon: iconRender('light'),
+        label: renderLabel({
+            label: () => i18n.t('theme.light'),
+            prefixRender: () => theme.choose === 'light' ? CheckCircleOutlined : CircleOutlined,
+            suffix: LightModeOutlined,
+        }),
     },
     {
         key: 'divider',
@@ -58,8 +39,11 @@ const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption
     },
     {
         key: 'auto',
-        label: labelRender('theme.light', DarkTheme20Filled),
-        icon: iconRender('auto'),
+        label: renderLabel({
+            label: () => i18n.t('theme.auto'),
+            prefixRender: () => theme.choose === 'auto' ? CheckCircleOutlined : CircleOutlined,
+            suffix: DarkTheme20Filled,
+        }),
     },
 ]
 function handleSelect(key: string,
