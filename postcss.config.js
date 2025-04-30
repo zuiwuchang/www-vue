@@ -15,12 +15,19 @@ export default {
                 /^v-/,
                 /^data-v-/,
                 /-(enter|leave)(-(active|to))?$/,
-                // 如果使用 Element Plus 或其他 UI 庫
-                /^el-/,
+                // primeflex
+                'hidden',
+                'block',
+                'inline',
+                'inline-block',
+                'flex',
+                'inline-flex',
+                /^(sm|md|lg|xl)\:/,
+                /^(gap|row|column|align|justify|z|flex|top|right|bottom|left|overflow)-/,
+                //,
                 // 動態類名（根據你的專案添加）
                 'active',
                 'disabled',
-                'hidden',
             ],
         }) : null,
     ].filter(Boolean),

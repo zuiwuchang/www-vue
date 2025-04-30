@@ -99,7 +99,7 @@ export const useLocaleStore = defineStore('locale', () => {
     const userdata = ref(loadValue())
 
     const locale = computed(() => calculate(userdata.value, languages.value))
-    const choose = (computed({
+    const choose = computed({
         get() {
             return userdata.value
         },
@@ -117,7 +117,7 @@ export const useLocaleStore = defineStore('locale', () => {
                 userdata.value = val
             }
         },
-    }))
+    })
 
     let counter = 0
     function start() {

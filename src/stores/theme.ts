@@ -39,9 +39,9 @@ export const useThemeStore = defineStore('theme', () => {
         return os.value == 'dark' ? darkTheme : lightTheme
     })
 
-    const choose = (computed({
+    const choose = computed({
         get() {
-            return userdata.value
+            return userdata.value as string
         },
         set(val) {
             switch (val) {
@@ -59,7 +59,7 @@ export const useThemeStore = defineStore('theme', () => {
                 userdata.value = val
             }
         },
-    }))
+    })
     return {
         /**
          * 返回當前 正在使用的 主題名稱
@@ -76,7 +76,7 @@ export const useThemeStore = defineStore('theme', () => {
     }
 })
 
-function loadValue() {
+function loadValue(): string {
     try {
         const s = localStorage.getItem(Key) || 'auto'
         switch (s) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h } from 'vue';
+import { h } from 'vue'
 import {
     DarkModeOutlined, LightModeOutlined,
     CircleOutlined, CheckCircleOutlined,
@@ -9,96 +9,71 @@ import {
     NButton,
     NDropdown,
     NIcon,
-} from 'naive-ui';
-import type { DropdownOption, DropdownRenderOption, DropdownDividerOption } from 'naive-ui';
-import type { Component } from 'vue';
+} from 'naive-ui'
+import type { DropdownOption, DropdownRenderOption, DropdownDividerOption } from 'naive-ui'
+import type { Component } from 'vue'
 import { useThemeStore } from '@/stores/theme'
 import { useI18n } from 'vue-i18n'
 const i18n = useI18n()
 const theme = useThemeStore()
-interface RenderItemOptions {
-    label: string
-    suffix: Component
-    key: string
-    onClick: () => void
+
+function iconRender(id: string) {
+    return () => h(NIcon, null, {
+        default: () => h(
+            theme.choose === id ? CheckCircleOutlined : CircleOutlined
+        )
+    })
 }
-function renderItem(opts: RenderItemOptions) {
-    return h('div', {
-        style: {
-            padding: '0 6px 0 6px',
-        }
-    }, [h(
-        NButton,
+function labelRender(key: string, suffix?: Component) {
+    return () => h('div',
         {
-            quaternary: true,
-            style: {
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '0 12px',
-                height: '32px',
-                fontSize: '14px',
-            },
-            onClick: opts.onClick,
+            class: "flex flex-row align-items-center align-content-center justify-content-between gap-2",
         },
-        {
-            default: () =>
-                h('div', { style: { display: 'flex', alignItems: 'center', width: '100%' } }, [
-                    h(NIcon, { style: { marginRight: '8px' } }, {
-                        default: () => h(
-                            theme.choose == opts.key ? CheckCircleOutlined : CircleOutlined
-                        )
-                    }),
-                    h('span', { style: { flex: 1, textAlign: 'left' } }, i18n.t(opts.label)),
-                    h(NIcon, { style: { marginLeft: '8px' } }, { default: () => h(opts.suffix) }),
-                ]),
-        }
-    )]);
-}
-function createItem(opts: RenderItemOptions) {
-    return {
-        type: 'render',
-        key: opts.key,
-        render: () => {
-            return renderItem(opts)
-        }
-    }
+        [
+            h('div',
+                {
+                    class: '',
+                },
+                i18n.t(key),
+            ),
+            suffix ? h(NIcon, null, {
+                default: () => h(suffix)
+            }) : h('div')
+        ])
 }
 const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption> = [
-    createItem({
-        label: 'theme.dark',
-        suffix: DarkModeOutlined,
-        key: 'dark',
-        onClick: () => {
-            theme.choose = 'dark'
-        }
-    }),
-    createItem({
-        label: 'theme.light',
-        suffix: LightModeOutlined,
-        key: 'light',
-        onClick: () => {
-            theme.choose = 'light'
-        }
-    }),
     {
-        type: 'divider',
-        key: 'divider',
+        key: 'dark',
+        label: labelRender('theme.dark', DarkModeOutlined),
+        icon: iconRender('dark'),
     },
-    createItem({
-        label: 'theme.auto',
-        suffix: DarkTheme20Filled,
+    {
+        key: 'light',
+        label: labelRender('theme.light', LightModeOutlined),
+        icon: iconRender('light'),
+    },
+    {
+        key: 'divider',
+        type: 'divider',
+    },
+    {
         key: 'auto',
-        onClick: () => {
-            theme.choose = 'auto'
-        }
-    }),
+        label: labelRender('theme.light', DarkTheme20Filled),
+        icon: iconRender('auto'),
+    },
 ]
-
+function handleSelect(key: string,
+    // options: DropdownOption | DropdownRenderOption | DropdownDividerOption
+) {
+    theme.choose = key
+}
+defineProps<{
+    placement?: any
+}>()
 </script>
 <template>
-    <n-dropdown trigger="hover" :show-arrow="true" placement="bottom-end" :options="menus">
+    <n-dropdown trigger="hover" :show-arrow="true" :placement="placement" :options="menus" @select="handleSelect">
+        <!-- <n-dropdown :show="true" :show-arrow="true" :placement="placement" :options="menus" @select="handleSelect"> -->
         <n-button :text="true">
             <template #icon>
                 <n-icon v-if="theme.name == 'dark'">
