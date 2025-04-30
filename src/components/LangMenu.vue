@@ -19,7 +19,6 @@ import { renderLabel } from '@/internal/render/label'
 const i18n = useI18n()
 const locale = useLocaleStore()
 
-
 const menus: Array<DropdownOption | DropdownRenderOption | DropdownDividerOption> =
     Locales.map((v) => {
         return {

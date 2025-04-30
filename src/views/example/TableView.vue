@@ -56,8 +56,9 @@ const items = [
     </n-table>
 
     <n-card v-for="item in items" :key="item.id" v-if="!breakpoint.md">
+
       <n-table :bordered="false" :single-line="true">
-        <tbody>
+        <tbody class="container">
           <tr>
             <td> <strong>ID:</strong></td>
             <td> {{ item.id }}</td>
@@ -80,16 +81,6 @@ const items = [
           </tr>
         </tbody>
       </n-table>
-      <!-- <div class="flex flex-row justify-content-between">
-        <strong>ID:</strong>
-        <div>{{ item.id }}</div>
-      </div>
-      <div class="flex flex-row justify-content-between">
-        <strong>First Name:</strong>
-        <div>{{ item.last_name }}</div>
-      </div> -->
     </n-card>
   </div>
 </template>
-
-<style scoped></style>

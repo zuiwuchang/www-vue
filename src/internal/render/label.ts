@@ -130,18 +130,25 @@ export function renderLabel(options: RenderLabelOptions) {
     let renderPrefix: () => VNode
     if (options.prefixRender) {
         const render = options.prefixRender
-        renderPrefix = () => h(NIcon,
-            { 'aria-hidden': 'true' },
-            {
-                default: () => h(render())
-            })
+        renderPrefix = () => h('div',
+            null,
+            h(NIcon,
+                { 'aria-hidden': 'true' },
+                {
+                    default: () => h(render())
+                },
+            ),
+        )
     } else if (options.prefix) {
         const tag = options.prefix
-        renderPrefix = () => h(NIcon,
-            { 'aria-hidden': 'true' },
-            {
-                default: () => h(tag)
-            },
+        renderPrefix = () => h('div',
+            null,
+            h(NIcon,
+                { 'aria-hidden': 'true' },
+                {
+                    default: () => h(tag)
+                },
+            ),
         )
     } else {
         renderPrefix = renderIconStatic
@@ -162,18 +169,26 @@ export function renderLabel(options: RenderLabelOptions) {
     let renderSuffix: () => VNode
     if (options.suffixRender) {
         const render = options.suffixRender
-        renderSuffix = () => h(NIcon,
-            { 'aria-hidden': 'true' },
-            {
-                default: () => h(render())
-            })
+        renderSuffix = () => h('div',
+            null,
+            h(NIcon,
+                { 'aria-hidden': 'true' },
+                {
+                    default: () => h(render())
+                },
+            ),
+        )
     } else if (options.suffix) {
         const tag = options.suffix
-        renderSuffix = () => h(NIcon,
-            { 'aria-hidden': 'true' },
-            {
-                default: () => h(tag)
-            })
+        renderSuffix = () => h('div',
+            null,
+            h(NIcon,
+                { 'aria-hidden': 'true' },
+                {
+                    default: () => h(tag)
+                },
+            ),
+        )
     } else {
         renderSuffix = renderIconStatic
     }
