@@ -10,18 +10,18 @@ import {
 
 } from 'naive-ui';
 import { renderLabel } from '@/internal/render/label'
-import Box from './Box.vue'
+
 
 const menus = [
     {
         key: 'table',
         label: renderLabel({
-            prefix: Box,
             label: 'table',
             url: '/example/table',
-            suffix: BackupTableFilled,
+            prefix: BackupTableFilled,
         }),
     },
+
 ]
 
 const props = defineProps<{

@@ -19,7 +19,7 @@ const items = [
   <div class="flex flex-column gap-3">
     <n-card title="table">
       <p>
-        爲手機顯示 table 通常都是糟糕的，因爲手機屏幕太小了，table 更本顯示不全，體驗很差
+        爲手機顯示 table 通常都是糟糕的，因爲手機屏幕太小了，table 根本顯示不全，體驗很差
       </p>
       <p>
         但是我從
@@ -27,10 +27,10 @@ const items = [
           buefy
         </n-button>
         學到一個好主意，在小屏幕中使用
-        card 去顯示 table 內容
+        類似 card 的東西去顯示 table 內容
       </p>
       <p>
-        其改變窗口尺寸以查看下述表格顯示模式的變化
+        改變窗口尺寸以查看下述表格顯示模式的變化
       </p>
     </n-card>
 

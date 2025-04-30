@@ -22,7 +22,7 @@ const open = ref(false)
     <n-el>
         <!-- 爲桌面系統佈局導航 -->
         <div :class="theme.name == 'dark' ? 'navbar-dark' : 'navbar-light'"
-            class="flex align-items-center align-content-center" v-if="breakpoint.md">
+            class="flex justify-content-center align-items-center" v-if="breakpoint.md">
             <div class="container flex">
                 <div class="flex flex-grow-1 gap-2">
                     <slot name="brand"></slot>
